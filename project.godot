@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="dot-hud"
-config/description="Shooter HUD minimap and data binding with no art. Depends only on dot-core."
+config/name="gs-hud"
+config/description="Shooter HUD minimap and data binding with no art. Depends only on gs-core."
 run/main_scene="res://examples/hud_selftest.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -23,7 +23,7 @@ window/size/viewport_height=900
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dot_hud/plugin.cfg")
+enabled=PackedStringArray("res://addons/gs_hud/plugin.cfg")
 
 [importer_defaults]
 

@@ -1,9 +1,9 @@
 class_name GSHudConfig
 extends GSConfig
 
-## Every tunable of GameSpice HUD. A game binds it with GSGameConfigBinder (kind `hud`); `cfg/addon/dot_hud/*.yml`, `DOT_HUD_*` and `--hud-*` layer over these defaults. Ranges are inspector slider limits, not caps.
+## Every tunable of GameSpice HUD. A game binds it with GSGameConfigBinder (kind `hud`); `cfg/addon/gs_hud/*.yml`, `GS_HUD_*` and `--hud-*` layer over these defaults. Ranges are inspector slider limits, not caps.
 
-const ADDON := "dot-hud"
+const ADDON := "gs-hud"
 
 ## Master switch: off, the minimap draws nothing.
 @export var enabled: bool = true
@@ -64,7 +64,7 @@ const ADDON := "dot-hud"
 
 
 func env_prefix() -> String:
-	return "DOT_HUD_"
+	return "GS_HUD_"
 
 
 func cli_prefix() -> String:
@@ -89,7 +89,7 @@ func validate() -> GSResult:
 	return GSResult.success(self)
 
 
-## Defaults, then `cfg/addon/dot_hud/*.yml` and the game tier, then environment and command line.
+## Defaults, then `cfg/addon/gs_hud/*.yml` and the game tier, then environment and command line.
 static func from_files() -> GSResult:
 	var cfg := GSHudConfig.new()
 	var files := GSAddonConfig.load_dir(ADDON)

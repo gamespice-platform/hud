@@ -4,10 +4,10 @@ Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage 
 
 ## Install
 
-1. Copy `addons/dot_hud/` and `addons/dot_core/` into your project.
+1. Copy `addons/gs_hud/` and `addons/gs_core/` into your project.
 2. Enable the addon in *Project > Project Settings > Plugins*.
 
-It needs only GameSpice Core ([dot_core](https://github.com/gamespice-platform/core)).
+It needs only GameSpice Core ([gs_core](https://github.com/gamespice-platform/core)).
 
 ## Quick start
 
@@ -35,7 +35,7 @@ var p := GSHudRadar.project(origin, yaw, target, cfg.minimap_range, cfg.minimap_
 
 ## Settings
 
-Every number is a field on `GSHudConfig`. The values below are defaults, and the ranges are inspector slider limits, not enforced caps. Set the property from code or a config file (`cfg/addon/dot_hud/hud.yml`, `DOT_HUD_*`, `--hud-*`) to go beyond them. A bad value fails loudly in `validate()`.
+Every number is a field on `GSHudConfig`. The values below are defaults, and the ranges are inspector slider limits, not enforced caps. Set the property from code or a config file (`cfg/addon/gs_hud/hud.yml`, `GS_HUD_*`, `--hud-*`) to go beyond them. A bad value fails loudly in `validate()`.
 
 | Setting | Default | What it does |
 | --- | --- | --- |

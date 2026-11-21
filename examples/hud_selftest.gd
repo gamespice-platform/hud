@@ -1,6 +1,6 @@
 extends Node
 
-## dot-hud's headless suite (res://examples/hud_selftest.tscn).
+## gs-hud's headless suite (res://examples/hud_selftest.tscn).
 ## Counts sections run to their last line as well as checks, because a script error aborts a section and not the run.
 
 const EXPECTED_SECTIONS := 10
@@ -12,7 +12,7 @@ var _sections := 0
 
 
 func _ready() -> void:
-	print("dot-hud")
+	print("gs-hud")
 	_config()
 	_radar()
 	_blips()
@@ -47,7 +47,7 @@ func _config() -> void:
 	_check(c.validate().ok, "blip_limit 0 and blip_ttl 0 (unlimited, forever) are valid")
 	var applied := c.apply_dictionary({"minimap_range": 90.0, "minimap_rotate": false, "blip_limit": 8})
 	_check(applied.size() == 3 and c.minimap_range == 90.0 and not c.minimap_rotate and c.blip_limit == 8, "a dictionary layer sets every type", str(applied))
-	_check(c.env_prefix() == "DOT_HUD_" and c.cli_prefix() == "--hud-", "env and command-line prefixes")
+	_check(c.env_prefix() == "GS_HUD_" and c.cli_prefix() == "--hud-", "env and command-line prefixes")
 	var r := GSHudConfig.from_files()
 	_check(r.ok and (r.value as GSHudConfig).describe().begins_with("hud"), "from_files returns a config that describes itself")
 	_sections += 1

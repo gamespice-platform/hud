@@ -2,13 +2,13 @@
 
 Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage numbers, hit markers, crosshair, ammo and health widgets and a minimap, all bound to data. Part of the GameSpice addon family.
 
-**The distributable is `addons/dot_hud/`.** It requires only dot-core (`addons/dot_core`, a gitignored symlink to `../../dot-core/addons/dot_core`). Never depend on another addon from here.
+**The distributable is `addons/gs_hud/`.** It requires only gs-core (`addons/gs_core`, a gitignored symlink to `../../gs-core/addons/gs_core`). Never depend on another addon from here.
 
 | Path | What it holds |
 | --- | --- |
-| `addons/dot_hud/dot_hud_api.gd` | `LEVEL` and `OLDEST`: the API level (2) and the oldest a consumer may target |
-| `addons/dot_hud/core/`, `runtime/` | blip set, radar, feed, feed line, numbers, number, hit marker, spread, meter and config in core (pure logic: no nodes, no I/O); minimap, feed, numbers, crosshair and meter views in runtime (idle until their model changes) |
-| `cfg/addon/dot_hud/hud.yml` | shipped defaults, layered under the game, environment and command line |
+| `addons/gs_hud/gs_hud_api.gd` | `LEVEL` and `OLDEST`: the API level (2) and the oldest a consumer may target |
+| `addons/gs_hud/core/`, `runtime/` | blip set, radar, feed, feed line, numbers, number, hit marker, spread, meter and config in core (pure logic: no nodes, no I/O); minimap, feed, numbers, crosshair and meter views in runtime (idle until their model changes) |
+| `cfg/addon/gs_hud/hud.yml` | shipped defaults, layered under the game, environment and command line |
 | `examples/hud_selftest.gd` | the headless suite; `EXPECTED_SECTIONS` and `EXPECTED_CHECKS` must match what it runs |
 
 ## Boundaries
