@@ -1,1 +1,9 @@
 # Shipped defaults are in DotHudConfig; a key here overrides one.
+# feed_limit: 6        # 0 = unlimited
+# feed_ttl: 6.0        # 0 = forever
+# number_limit: 32     # 0 = unlimited
+# number_merge: 0.35
+# crosshair_gap: 4.0
+# crosshair_spread_px: 24.0
+# meter_half_life: 0.08
+# meter_low: 0.25

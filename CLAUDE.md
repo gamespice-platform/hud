@@ -6,15 +6,15 @@ Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage 
 
 | Path | What it holds |
 | --- | --- |
-| `addons/dot_hud/dot_hud_api.gd` | `LEVEL` and `OLDEST`: the API level (1) and the oldest a consumer may target |
-| `addons/dot_hud/core/`, `runtime/` | dot_hud_blip_set.gd, dot_hud_config.gd, dot_hud_minimap_view.gd, dot_hud_radar.gd (core is pure logic: no nodes, no I/O) |
+| `addons/dot_hud/dot_hud_api.gd` | `LEVEL` and `OLDEST`: the API level (2) and the oldest a consumer may target |
+| `addons/dot_hud/core/`, `runtime/` | blip set, radar, feed, feed line, numbers, number, hit marker, spread, meter and config in core (pure logic: no nodes, no I/O); minimap, feed, numbers, crosshair and meter views in runtime (idle until their model changes) |
 | `cfg/addon/dot_hud/hud.yml` | shipped defaults, layered under the game, environment and command line |
 | `examples/hud_selftest.gd` | the headless suite; `EXPECTED_SECTIONS` and `EXPECTED_CHECKS` must match what it runs |
 
 ## Boundaries
 
 - Ships no art: no textures, fonts or icons. Colours are exports on the view.
-- Not the crosshair, hit marker, damage numbers, vitals, ammo or feed and table views: GameSpice UI owns those widgets.
+- Not the scoreboard table or menus: GameSpice UI owns those.
 - Not the match data: GameSpice Match owns the kill feed entries and scoreboard rows; the HUD binds to them.
 - Not a layout system or theme.
 

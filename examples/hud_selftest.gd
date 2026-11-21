@@ -3,8 +3,8 @@ extends Node
 ## dot-hud's headless suite (res://examples/hud_selftest.tscn).
 ## Counts sections run to their last line as well as checks, because a script error aborts a section and not the run.
 
-const EXPECTED_SECTIONS := 5
-const EXPECTED_CHECKS := 32
+const EXPECTED_SECTIONS := 10
+const EXPECTED_CHECKS := 65
 
 var _passed := 0
 var _failed := 0
@@ -18,6 +18,11 @@ func _ready() -> void:
 	_blips()
 	_view()
 	_bearing()
+	_feed()
+	_numbers()
+	_marker_and_spread()
+	_meter()
+	_views()
 	print("")
 	_check(_sections == EXPECTED_SECTIONS, "every section ran to its last line (%d of %d)" % [_sections, EXPECTED_SECTIONS])
 	_check(_passed + _failed == EXPECTED_CHECKS, "and the suite ran all %d of its checks (%d)" % [EXPECTED_CHECKS, _passed + _failed])
@@ -130,3 +135,129 @@ func _check(ok: bool, what: String, extra: String = "") -> void:
 	else:
 		_failed += 1
 		print("  FAIL  ", what, "  ", extra)
+
+
+func _feed() -> void:
+	var cfg := DotHudConfig.new()
+	cfg.feed_limit = 2
+	cfg.feed_ttl = 4.0
+	cfg.feed_fade = 1.0
+	var f := DotHudFeed.new(cfg)
+	_check(not f.push(PackedStringArray(), PackedColorArray(), 0.0).ok, "an empty line fails")
+	_check(not f.push(PackedStringArray(["a", "b"]), PackedColorArray([Color.RED]), 0.0).ok, "fragments and colours must match")
+	f.push(PackedStringArray(["A", " killed ", "B"]), PackedColorArray([Color.RED, Color.WHITE, Color.BLUE]), 0.0)
+	f.push(PackedStringArray(["C"]), PackedColorArray([Color.RED]), 1.0)
+	f.push(PackedStringArray(["D"]), PackedColorArray([Color.RED]), 2.0)
+	_check(f.size() == 2 and f.line(0).plain() == "C", "the limit drops the oldest line")
+	_check(is_equal_approx(f.alpha(0, 2.0), 1.0) and is_equal_approx(f.alpha(0, 4.5), 0.5), "a line fades over its last second")
+	_check(f.expire(5.0) == 1 and f.size() == 1, "expiry drops lines past the ttl")
+	f.clear()
+	_check(f.size() == 0, "clear empties the feed")
+	var cfg2 := DotHudConfig.new()
+	cfg2.feed_limit = 0
+	cfg2.feed_ttl = 0.0
+	var g := DotHudFeed.new(cfg2)
+	for i in 100:
+		g.push(PackedStringArray(["x"]), PackedColorArray([Color.WHITE]), float(i))
+	_check(g.size() == 100 and g.expire(1e6) == 0 and g.alpha(0, 1e6) == 1.0, "limit 0 and ttl 0 are unlimited and forever")
+	_sections += 1
+
+
+func _numbers() -> void:
+	var cfg := DotHudConfig.new()
+	cfg.number_limit = 2
+	cfg.number_ttl = 1.0
+	cfg.number_merge = 0.3
+	var n := DotHudNumbers.new(cfg)
+	n.add(1, 10.0, Vector3.ZERO, false, 0.0)
+	n.add(1, 15.0, Vector3.ONE, true, 0.2)
+	_check(n.size() == 1 and n.at(0).amount == 25.0 and n.at(0).headshot, "hits within the merge window add into one number")
+	n.add(1, 5.0, Vector3.ZERO, false, 0.9)
+	_check(n.size() == 2, "a hit after the window is a new number")
+	n.add(2, 5.0, Vector3.ZERO, false, 0.95)
+	_check(n.size() == 2 and n.at(0).victim == 1 and n.at(1).victim == 2, "past the limit the oldest is dropped")
+	_check(n.expire(1.92) == 1 and n.size() == 1, "expiry drops numbers past their ttl")
+	_check(is_equal_approx(n.progress(n.at(0), 1.45), 0.5), "progress runs 0 to 1")
+	var cfg2 := DotHudConfig.new()
+	cfg2.number_merge = 0.0
+	cfg2.number_limit = 0
+	var u := DotHudNumbers.new(cfg2)
+	for i in 50:
+		u.add(1, 1.0, Vector3.ZERO, false, 0.0)
+	_check(u.size() == 50, "merge 0 never merges and limit 0 is unlimited")
+	_sections += 1
+
+
+func _marker_and_spread() -> void:
+	var cfg := DotHudConfig.new()
+	var m := DotHudHitMarker.new()
+	_check(not m.active(0.0), "a fresh marker is off")
+	m.flash(cfg, 10.0, true, false)
+	_check(m.active(10.1) and is_equal_approx(m.alpha(10.0), 1.0) and not m.active(10.7), "a kill marker lasts its kill duration")
+	m.flash(cfg, 10.1)
+	_check(m.kill, "a pellet after the kill does not downgrade the marker")
+	m.flash(cfg, 10.5)
+	_check(not m.kill, "a later hit does")
+	var s := DotHudSpread.new()
+	s.kick(cfg)
+	s.kick(cfg)
+	_check(is_equal_approx(s.value, 0.5) and s.gap(cfg) > cfg.crosshair_gap, "shots open the crosshair")
+	for i in 5:
+		s.kick(cfg)
+	_check(s.value == 1.0, "spread is capped at full")
+	s.step(cfg, cfg.crosshair_recover, 0.0)
+	_check(is_equal_approx(s.value, 0.5), "one half life halves the spread")
+	s.step(cfg, 1.0, 0.3)
+	_check(s.value >= 0.3 and s.value < 0.31 and s.settled(0.3) == (s.value == 0.3), "it recovers to the held floor and no lower")
+	for i in 40:
+		s.step(cfg, 0.1, 0.3)
+	_check(s.settled(0.3), "and settles exactly")
+	_sections += 1
+
+
+func _meter() -> void:
+	var cfg := DotHudConfig.new()
+	cfg.meter_trail_delay = 0.5
+	cfg.meter_half_life = 0.1
+	var m := DotHudMeter.new()
+	m.set_value(100.0, 100.0, 0.0, cfg)
+	_check(m.settled() and m.fraction() == 1.0 and not m.low(cfg), "a full meter is settled and not low")
+	m.set_value(20.0, 100.0, 1.0, cfg)
+	_check(m.low(cfg) and not m.settled() and m.trail == 100.0, "a loss is low and leaves a trail")
+	m.step(cfg, 0.1, 1.1)
+	_check(m.shown < 100.0 and m.shown > 20.0 and m.trail == 100.0, "the fill eases while the trail waits")
+	m.step(cfg, 0.1, 1.6)
+	_check(m.trail < 100.0, "after the delay the trail drains")
+	for i in 100:
+		m.step(cfg, 0.1, 5.0 + i)
+	_check(m.settled() and m.shown == 20.0, "it settles exactly on the value")
+	m.set_value(80.0, 100.0, 9.0, cfg)
+	_check(m.trail == 80.0, "a rise lifts the trail with it")
+	m.set_value(500.0, 100.0, 9.0, cfg)
+	_check(m.value == 100.0, "a value over the maximum is clamped")
+	m.set_value(5.0, 0.0, 9.0, cfg)
+	_check(m.fraction() == 0.0 and not m.low(cfg), "a zero maximum has no fraction and is not low")
+	_sections += 1
+
+
+func _views() -> void:
+	var cfg := DotHudConfig.new()
+	var meter := DotHudMeterView.new()
+	var cross := DotHudCrosshairView.new()
+	var feedv := DotHudFeedView.new()
+	var numv := DotHudNumbersView.new()
+	for v in [meter, cross, feedv, numv]:
+		add_child(v)
+	meter.setup(cfg)
+	cross.setup(cfg)
+	feedv.setup(cfg, DotHudFeed.new(cfg))
+	numv.setup(cfg, DotHudNumbers.new(cfg))
+	_check(not meter.is_processing() and not cross.is_processing() and not feedv.is_processing() and not numv.is_processing(), "idle views do not process")
+	meter.set_value(10.0, 100.0)
+	cross.shoot()
+	_check(feedv.push(PackedStringArray(["x"]), PackedColorArray([Color.WHITE])).ok, "the feed view takes a line")
+	numv.add(1, 5.0, Vector3.ZERO)
+	_check(meter.is_processing() and cross.is_processing() and feedv.is_processing() and numv.is_processing(), "a change wakes each view")
+	for v in [meter, cross, feedv, numv]:
+		v.queue_free()
+	_sections += 1

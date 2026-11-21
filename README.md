@@ -1,6 +1,6 @@
 [![GameSpice HUD - GameSpice addon](docs/banner.png)](https://moddingcommunity.com/a/149-gs-hud)
 
-Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage numbers, hit markers, crosshair, ammo and health widgets and a minimap, all bound to data. Part of the GameSpice addon family.
+Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage numbers, hit markers, crosshair, ammo and health widgets and a minimap, all bound to data, each as a pure model plus a thin drawing view. Part of the GameSpice addon family.
 
 ## Install
 
@@ -26,6 +26,10 @@ view.viewer_yaw = player.rotation.y
 view.now = now
 view.queue_redraw()
 
+var feed := DotHudFeed.new(cfg)                            # kill feed model: push(texts, colours, now), expire(now)
+var meter := DotHudMeter.new()                             # health or ammo: set_value(v, max, now, cfg), a pale loss trail
+var spread := DotHudSpread.new()                           # crosshair: kick(cfg) per shot, step(cfg, delta, floor)
+
 var p := DotHudRadar.project(origin, yaw, target, cfg.minimap_range, cfg.minimap_radius)   # {pos, inside, distance}
 ```
 
@@ -43,11 +47,26 @@ Every number is a field on `DotHudConfig`. The values below are defaults, and th
 | `blip_ttl` | 3.0 | Seconds a blip survives without a fresh sighting; 0 keeps it until removed. |
 | `blip_fade` | 0.5 | Seconds a blip fades out at the end of its life; 0 drops it without fading. |
 | `edge_pin` | true | Pin blips that leave the range to the minimap edge instead of hiding them. |
+| `feed_limit` | 6 | Kill feed lines kept; 0 is unlimited. The oldest is dropped past it. |
+| `feed_ttl` | 6.0 | Seconds a feed line lives; 0 keeps it until removed. |
+| `feed_fade` | 0.5 | Seconds a feed line fades at the end of its life. |
+| `number_limit` | 32 | Damage numbers live at once; 0 is unlimited. |
+| `number_ttl` | 0.9 | Seconds a damage number floats. |
+| `number_merge` | 0.35 | Hits on one victim within this window add into one number. |
+| `marker_hit_sec` | 0.28 | Hit marker flash length. |
+| `marker_kill_sec` | 0.6 | Kill marker flash length. |
+| `crosshair_gap` | 4.0 | Resting gap of the crosshair arms in pixels. |
+| `crosshair_spread_px` | 24.0 | Extra gap at full spread. |
+| `crosshair_kick` | 0.25 | Spread added by one shot (0 to 1). |
+| `crosshair_recover` | 0.12 | Seconds for spread to halve. |
+| `meter_half_life` | 0.08 | Seconds for a health or ammo bar to cover half the way to its value. |
+| `meter_trail_delay` | 0.4 | Seconds the pale loss trail waits before draining. |
+| `meter_low` | 0.25 | Fraction under which a meter reads as low; 0 never. |
 
 ## What it is not
 
 - Ships no art: no textures, fonts or icons. Colours are exports on the view.
-- Not the crosshair, hit marker, damage numbers, vitals, ammo or feed and table views: GameSpice UI owns those widgets.
+- Not the scoreboard table or menus: GameSpice UI owns those. The HUD owns the in-play pieces: feed, damage numbers, hit marker, crosshair, meters and minimap.
 - Not the match data: GameSpice Match owns the kill feed entries and scoreboard rows; the HUD binds to them.
 - Not a layout system or theme.
 
