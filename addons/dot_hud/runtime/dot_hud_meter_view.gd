@@ -1,22 +1,22 @@
-class_name DotHudMeterView
+class_name GSHudMeterView
 extends Control
 
-## A horizontal bar for health, armour or ammo drawn with _draw and no textures, over a [DotHudMeter]. It processes only while the bar is still moving.
+## A horizontal bar for health, armour or ammo drawn with _draw and no textures, over a [GSHudMeter]. It processes only while the bar is still moving.
 
 @export var fill_colour := Color(0.35, 0.85, 0.4)
 @export var low_colour := Color(0.95, 0.3, 0.25)
 @export var trail_colour := Color(1, 1, 1, 0.55)
 @export var back_colour := Color(0, 0, 0, 0.5)
 
-var config := DotHudConfig.new()
-var meter := DotHudMeter.new()
+var config := GSHudConfig.new()
+var meter := GSHudMeter.new()
 
 
 func _ready() -> void:
 	set_process(false)
 
 
-func setup(cfg: DotHudConfig) -> void:
+func setup(cfg: GSHudConfig) -> void:
 	config = cfg
 
 

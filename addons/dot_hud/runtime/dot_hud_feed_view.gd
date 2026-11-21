@@ -1,14 +1,14 @@
-class_name DotHudFeedView
+class_name GSHudFeedView
 extends Control
 
-## Draws a [DotHudFeed] right-aligned, newest at the bottom, one coloured run per fragment. It processes only while the feed holds lines, to expire and fade them.
+## Draws a [GSHudFeed] right-aligned, newest at the bottom, one coloured run per fragment. It processes only while the feed holds lines, to expire and fade them.
 
 @export var font_size: int = 16
 @export var line_height: float = 20.0
 @export var gap: float = 6.0
 
-var config := DotHudConfig.new()
-var feed := DotHudFeed.new()
+var config := GSHudConfig.new()
+var feed := GSHudFeed.new()
 
 
 func _ready() -> void:
@@ -16,13 +16,13 @@ func _ready() -> void:
 	set_process(false)
 
 
-func setup(cfg: DotHudConfig, p_feed: DotHudFeed) -> void:
+func setup(cfg: GSHudConfig, p_feed: GSHudFeed) -> void:
 	config = cfg
 	feed = p_feed
 
 
-## Adds a line and starts expiring. Same contract as [method DotHudFeed.push].
-func push(texts: PackedStringArray, colours: PackedColorArray) -> DotResult:
+## Adds a line and starts expiring. Same contract as [method GSHudFeed.push].
+func push(texts: PackedStringArray, colours: PackedColorArray) -> GSResult:
 	var r := feed.push(texts, colours, _now())
 	set_process(feed.size() > 0)
 	queue_redraw()

@@ -1,7 +1,7 @@
-class_name DotHudNumbersView
+class_name GSHudNumbersView
 extends Control
 
-## Draws a [DotHudNumbers] over the world: each number is projected through the camera, rises and fades. It processes only while numbers are alive.
+## Draws a [GSHudNumbers] over the world: each number is projected through the camera, rises and fades. It processes only while numbers are alive.
 
 @export var font_size: int = 24
 @export var headshot_size: int = 30
@@ -9,8 +9,8 @@ extends Control
 @export var colour := Color(1, 1, 1)
 @export var headshot_colour := Color(1.0, 0.85, 0.3)
 
-var config := DotHudConfig.new()
-var numbers := DotHudNumbers.new()
+var config := GSHudConfig.new()
+var numbers := GSHudNumbers.new()
 ## The camera points are projected through; null uses the viewport's current one.
 var camera: Camera3D = null
 
@@ -20,7 +20,7 @@ func _ready() -> void:
 	set_process(false)
 
 
-func setup(cfg: DotHudConfig, p_numbers: DotHudNumbers) -> void:
+func setup(cfg: GSHudConfig, p_numbers: GSHudNumbers) -> void:
 	config = cfg
 	numbers = p_numbers
 

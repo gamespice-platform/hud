@@ -20,8 +20,8 @@ Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage 
 
 ## Rules
 
-- Every limit is configurable, 0 means unlimited where a limit makes sense, and a bad value fails loudly through `DotResult`.
+- Every limit is configurable, 0 means unlimited where a limit makes sense, and a bad value fails loudly through `GSResult`.
 - Time is passed in (`now`, `delta`); core classes never read a clock.
-- Everything here is prefixed `DotHud`. No `uid://` paths.
+- Everything here is prefixed `GSHud`. No `uid://` paths.
 - Prose says GameSpice, never the internal repo prefix.
 - Run the suite with `hv`, never bare Godot. Commit with the owner's identity; never tag.

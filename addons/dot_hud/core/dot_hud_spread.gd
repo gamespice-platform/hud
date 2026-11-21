@@ -1,4 +1,4 @@
-class_name DotHudSpread
+class_name GSHudSpread
 extends RefCounted
 
 ## The crosshair's spread as a number from 0 (still) to 1 (wide open): a shot kicks it, movement holds it, and it recovers with a half life. The view turns it into pixels through [method gap].
@@ -8,12 +8,12 @@ var value: float = 0.0
 
 
 ## One shot's kick.
-func kick(cfg: DotHudConfig) -> void:
+func kick(cfg: GSHudConfig) -> void:
 	value = minf(value + cfg.crosshair_kick, 1.0)
 
 
 ## Advances by [param delta]. [param floor_value] (0 to 1) is the spread movement or a stance keeps up; the spread never recovers below it.
-func step(cfg: DotHudConfig, delta: float, floor_value: float = 0.0) -> void:
+func step(cfg: GSHudConfig, delta: float, floor_value: float = 0.0) -> void:
 	var target := clampf(floor_value, 0.0, 1.0)
 	if value <= target:
 		value = target
@@ -30,5 +30,5 @@ func settled(floor_value: float = 0.0) -> bool:
 
 
 ## Pixels from the centre to each tick.
-func gap(cfg: DotHudConfig) -> float:
+func gap(cfg: GSHudConfig) -> float:
 	return cfg.crosshair_gap + cfg.crosshair_spread_px * value

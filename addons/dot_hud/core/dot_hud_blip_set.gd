@@ -1,4 +1,4 @@
-class_name DotHudBlipSet
+class_name GSHudBlipSet
 extends RefCounted
 
 ## The minimap's data: who is seen where, how long ago, and who may see them. Pure logic; time is passed as `now`.
@@ -9,8 +9,8 @@ var _ttl: float
 var _fade: float
 
 
-func _init(config: DotHudConfig = null) -> void:
-	var c := config if config else DotHudConfig.new()
+func _init(config: GSHudConfig = null) -> void:
+	var c := config if config else GSHudConfig.new()
 	_limit = c.blip_limit
 	_ttl = c.blip_ttl
 	_fade = c.blip_fade
@@ -21,13 +21,13 @@ func size() -> int:
 
 
 ## Records a sighting. `team` is the blip's team; `hostile_spotted` marks an enemy as seen this tick. Fails QUOTA at the limit for an id not yet held.
-func sight(id: StringName, team: int, pos: Vector3, now: float) -> DotResult:
+func sight(id: StringName, team: int, pos: Vector3, now: float) -> GSResult:
 	if id == &"":
-		return DotResult.fail(DotError.CODE_INVALID, "blip id is empty")
+		return GSResult.fail(GSError.CODE_INVALID, "blip id is empty")
 	if not _blips.has(id) and _limit > 0 and _blips.size() >= _limit:
-		return DotResult.fail(DotError.CODE_QUOTA, "blip limit %d reached" % _limit)
+		return GSResult.fail(GSError.CODE_QUOTA, "blip limit %d reached" % _limit)
 	_blips[id] = {"team": team, "pos": pos, "seen": now}
-	return DotResult.success(id)
+	return GSResult.success(id)
 
 
 func remove(id: StringName) -> void:

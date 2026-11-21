@@ -1,4 +1,4 @@
-class_name DotHudCrosshairView
+class_name GSHudCrosshairView
 extends Control
 
 ## Four ticks round the middle that open with fire and movement, and a hit marker over them. Drawn with _draw and no textures; it processes only while the spread or the marker is moving. Place it full-rect over the HUD.
@@ -9,9 +9,9 @@ extends Control
 @export var kill_colour := Color(1.0, 0.3, 0.25)
 @export var tick_length: float = 8.0
 
-var config := DotHudConfig.new()
-var spread := DotHudSpread.new()
-var marker := DotHudHitMarker.new()
+var config := GSHudConfig.new()
+var spread := GSHudSpread.new()
+var marker := GSHudHitMarker.new()
 ## Spread movement or a stance holds up, 0 to 1. Set it from the game.
 var floor_value: float = 0.0
 
@@ -21,7 +21,7 @@ func _ready() -> void:
 	set_process(false)
 
 
-func setup(cfg: DotHudConfig) -> void:
+func setup(cfg: GSHudConfig) -> void:
 	config = cfg
 
 

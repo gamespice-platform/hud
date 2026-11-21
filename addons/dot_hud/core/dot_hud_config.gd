@@ -1,7 +1,7 @@
-class_name DotHudConfig
-extends DotConfig
+class_name GSHudConfig
+extends GSConfig
 
-## Every tunable of GameSpice HUD. A game binds it with DotGameConfigBinder (kind `hud`); `cfg/addon/dot_hud/*.yml`, `DOT_HUD_*` and `--hud-*` layer over these defaults. Ranges are inspector slider limits, not caps.
+## Every tunable of GameSpice HUD. A game binds it with GSGameConfigBinder (kind `hud`); `cfg/addon/dot_hud/*.yml`, `DOT_HUD_*` and `--hud-*` layer over these defaults. Ranges are inspector slider limits, not caps.
 
 const ADDON := "dot-hud"
 
@@ -71,28 +71,28 @@ func cli_prefix() -> String:
 	return "--hud-"
 
 
-func validate() -> DotResult:
+func validate() -> GSResult:
 	if minimap_range <= 0.0 or minimap_radius <= 0.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud minimap_range and minimap_radius must be above 0")
+		return GSResult.fail(GSError.CODE_INVALID, "hud minimap_range and minimap_radius must be above 0")
 	if blip_limit < 0 or blip_ttl < 0.0 or blip_fade < 0.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud blip_limit, blip_ttl and blip_fade cannot be negative (0 means unlimited or off)")
+		return GSResult.fail(GSError.CODE_INVALID, "hud blip_limit, blip_ttl and blip_fade cannot be negative (0 means unlimited or off)")
 	if feed_limit < 0 or feed_ttl < 0.0 or feed_fade < 0.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud feed_limit, feed_ttl and feed_fade cannot be negative (0 means unlimited or off)")
+		return GSResult.fail(GSError.CODE_INVALID, "hud feed_limit, feed_ttl and feed_fade cannot be negative (0 means unlimited or off)")
 	if number_limit < 0 or number_merge < 0.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud number_limit and number_merge cannot be negative (0 means unlimited or off)")
+		return GSResult.fail(GSError.CODE_INVALID, "hud number_limit and number_merge cannot be negative (0 means unlimited or off)")
 	if number_ttl <= 0.0 or marker_hit_sec <= 0.0 or marker_kill_sec <= 0.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud number_ttl and the marker durations must be above 0")
+		return GSResult.fail(GSError.CODE_INVALID, "hud number_ttl and the marker durations must be above 0")
 	if crosshair_gap < 0.0 or crosshair_spread_px < 0.0 or crosshair_recover < 0.0 or crosshair_kick < 0.0 or crosshair_kick > 1.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud crosshair gap, spread and recover cannot be negative and kick is 0 to 1")
+		return GSResult.fail(GSError.CODE_INVALID, "hud crosshair gap, spread and recover cannot be negative and kick is 0 to 1")
 	if meter_half_life < 0.0 or meter_trail_delay < 0.0 or meter_low < 0.0 or meter_low > 1.0:
-		return DotResult.fail(DotError.CODE_INVALID, "hud meter half life and trail delay cannot be negative and meter_low is 0 to 1")
-	return DotResult.success(self)
+		return GSResult.fail(GSError.CODE_INVALID, "hud meter half life and trail delay cannot be negative and meter_low is 0 to 1")
+	return GSResult.success(self)
 
 
 ## Defaults, then `cfg/addon/dot_hud/*.yml` and the game tier, then environment and command line.
-static func from_files() -> DotResult:
-	var cfg := DotHudConfig.new()
-	var files := DotAddonConfig.load_dir(ADDON)
+static func from_files() -> GSResult:
+	var cfg := GSHudConfig.new()
+	var files := GSAddonConfig.load_dir(ADDON)
 	if not files.ok:
 		return files
 	cfg.apply_dictionary(files.value as Dictionary, "yml")

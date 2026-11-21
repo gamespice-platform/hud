@@ -1,7 +1,7 @@
-class_name DotHudNumber
+class_name GSHudNumber
 extends RefCounted
 
-## One floating damage number of a [DotHudNumbers]: pooled, reused, never freed.
+## One floating damage number of a [GSHudNumbers]: pooled, reused, never freed.
 
 var victim: int = 0
 var amount: float = 0.0

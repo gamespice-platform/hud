@@ -1,4 +1,4 @@
-class_name DotHudRadar
+class_name GSHudRadar
 extends RefCounted
 
 ## World to minimap projection on the ground plane (x and z). Pure maths: no nodes, no art. Yaw is rotation about +Y; at yaw 0 the player faces -Z, which is the top of a heading-up minimap.

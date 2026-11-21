@@ -1,4 +1,4 @@
-class_name DotHudMeter
+class_name GSHudMeter
 extends RefCounted
 
 ## A health or ammo bar as a model: the value, a smoothed value the bar shows, and a damage trail that waits and then drains. The bar reads [member shown] and [member trail]; this class draws nothing.
@@ -13,7 +13,7 @@ var _hold_until: float = 0.0
 
 
 ## Sets the real value and maximum. A drop restarts the trail's wait; a rise snaps the trail up.
-func set_value(v: float, maximum: float, now: float, cfg: DotHudConfig) -> void:
+func set_value(v: float, maximum: float, now: float, cfg: GSHudConfig) -> void:
 	max_value = maxf(maximum, 0.0)
 	v = clampf(v, 0.0, max_value)
 	if v < value:
@@ -24,7 +24,7 @@ func set_value(v: float, maximum: float, now: float, cfg: DotHudConfig) -> void:
 
 
 ## Eases the shown value and drains the trail; call it only while [method settled] is false.
-func step(cfg: DotHudConfig, delta: float, now: float) -> void:
+func step(cfg: GSHudConfig, delta: float, now: float) -> void:
 	var k := 1.0 if cfg.meter_half_life <= 0.0 else 1.0 - pow(0.5, maxf(delta, 0.0) / cfg.meter_half_life)
 	shown = lerpf(shown, value, k)
 	if absf(shown - value) < max_value * 0.0005:
@@ -53,5 +53,5 @@ func trail_fraction() -> float:
 
 
 ## True under `meter_low` of the maximum.
-func low(cfg: DotHudConfig) -> bool:
+func low(cfg: GSHudConfig) -> bool:
 	return max_value > 0.0 and cfg.meter_low > 0.0 and fraction() < cfg.meter_low

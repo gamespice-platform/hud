@@ -4,16 +4,16 @@ Each piece is a pure model in `core/` (no nodes, time passed in, pooled so a war
 
 | Piece | Model | View |
 | --- | --- | --- |
-| Kill feed | `DotHudFeed`, `DotHudFeedLine` | `DotHudFeedView` |
-| Damage numbers | `DotHudNumbers`, `DotHudNumber` | `DotHudNumbersView` |
-| Hit marker | `DotHudHitMarker` | drawn by `DotHudCrosshairView` |
-| Crosshair spread | `DotHudSpread` | `DotHudCrosshairView` |
-| Health, ammo, any bar | `DotHudMeter` | `DotHudMeterView` |
-| Minimap | `DotHudBlipSet`, `DotHudRadar` | `DotHudMinimapView` |
+| Kill feed | `GSHudFeed`, `GSHudFeedLine` | `GSHudFeedView` |
+| Damage numbers | `GSHudNumbers`, `GSHudNumber` | `GSHudNumbersView` |
+| Hit marker | `GSHudHitMarker` | drawn by `GSHudCrosshairView` |
+| Crosshair spread | `GSHudSpread` | `GSHudCrosshairView` |
+| Health, ammo, any bar | `GSHudMeter` | `GSHudMeterView` |
+| Minimap | `GSHudBlipSet`, `GSHudRadar` | `GSHudMinimapView` |
 
 ## Rules
 
-- A limit of 0 is unlimited, a bad config value is refused by `DotHudConfig.validate()` with a `DotResult`.
+- A limit of 0 is unlimited, a bad config value is refused by `GSHudConfig.validate()` with a `GSResult`.
 - A feed line is a list of coloured fragments (killer, weapon, victim), so a game colours teams without the feed knowing about teams.
 - Damage numbers merge hits on one victim inside `number_merge` seconds, so a shotgun reads as one number.
 - A meter keeps a pale trail behind the fill after a loss; `low()` is false for a zero maximum.

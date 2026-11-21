@@ -12,11 +12,11 @@ It needs only GameSpice Core ([dot_core](https://github.com/gamespice-platform/c
 ## Quick start
 
 ```gdscript
-var cfg := DotHudConfig.from_files().value as DotHudConfig
-var blips := DotHudBlipSet.new(cfg)
+var cfg := GSHudConfig.from_files().value as GSHudConfig
+var blips := GSHudBlipSet.new(cfg)
 blips.sight(&"mate_2", team, mate.global_position, now)    # QUOTA past blip_limit, unless it is 0
 
-var view := DotHudMinimapView.new()                        # a Control, drawn with _draw, no textures
+var view := GSHudMinimapView.new()                        # a Control, drawn with _draw, no textures
 add_child(view)
 view.setup(cfg, blips)
 # each frame
@@ -26,16 +26,16 @@ view.viewer_yaw = player.rotation.y
 view.now = now
 view.queue_redraw()
 
-var feed := DotHudFeed.new(cfg)                            # kill feed model: push(texts, colours, now), expire(now)
-var meter := DotHudMeter.new()                             # health or ammo: set_value(v, max, now, cfg), a pale loss trail
-var spread := DotHudSpread.new()                           # crosshair: kick(cfg) per shot, step(cfg, delta, floor)
+var feed := GSHudFeed.new(cfg)                            # kill feed model: push(texts, colours, now), expire(now)
+var meter := GSHudMeter.new()                             # health or ammo: set_value(v, max, now, cfg), a pale loss trail
+var spread := GSHudSpread.new()                           # crosshair: kick(cfg) per shot, step(cfg, delta, floor)
 
-var p := DotHudRadar.project(origin, yaw, target, cfg.minimap_range, cfg.minimap_radius)   # {pos, inside, distance}
+var p := GSHudRadar.project(origin, yaw, target, cfg.minimap_range, cfg.minimap_radius)   # {pos, inside, distance}
 ```
 
 ## Settings
 
-Every number is a field on `DotHudConfig`. The values below are defaults, and the ranges are inspector slider limits, not enforced caps. Set the property from code or a config file (`cfg/addon/dot_hud/hud.yml`, `DOT_HUD_*`, `--hud-*`) to go beyond them. A bad value fails loudly in `validate()`.
+Every number is a field on `GSHudConfig`. The values below are defaults, and the ranges are inspector slider limits, not enforced caps. Set the property from code or a config file (`cfg/addon/dot_hud/hud.yml`, `DOT_HUD_*`, `--hud-*`) to go beyond them. A bad value fails loudly in `validate()`.
 
 | Setting | Default | What it does |
 | --- | --- | --- |

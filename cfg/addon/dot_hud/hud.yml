@@ -1,4 +1,4 @@
-# Shipped defaults are in DotHudConfig; a key here overrides one.
+# Shipped defaults are in GSHudConfig; a key here overrides one.
 # feed_limit: 6        # 0 = unlimited
 # feed_ttl: 6.0        # 0 = forever
 # number_limit: 32     # 0 = unlimited

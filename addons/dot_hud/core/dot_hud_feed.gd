@@ -1,32 +1,32 @@
-class_name DotHudFeed
+class_name GSHudFeed
 extends RefCounted
 
 ## A bounded, self-expiring list of lines: the kill feed. It holds no nodes and reads no clock; time is passed in. Lines are pooled, so after warm-up a push allocates nothing.
 ##
 ## It takes fragments, not GameSpice Match types: a game formats whatever it has.
 
-var _cfg: DotHudConfig
-var _lines: Array[DotHudFeedLine] = []
-var _pool: Array[DotHudFeedLine] = []
+var _cfg: GSHudConfig
+var _lines: Array[GSHudFeedLine] = []
+var _pool: Array[GSHudFeedLine] = []
 
 
-func _init(cfg: DotHudConfig = null) -> void:
-	_cfg = cfg if cfg != null else DotHudConfig.new()
+func _init(cfg: GSHudConfig = null) -> void:
+	_cfg = cfg if cfg != null else GSHudConfig.new()
 
 
 ## Adds a line of [param texts] coloured by [param colours] (same length) at [param now]. With a limit set the oldest line is dropped to make room. Fails INVALID on empty or mismatched fragments.
-func push(texts: PackedStringArray, colours: PackedColorArray, now: float) -> DotResult:
+func push(texts: PackedStringArray, colours: PackedColorArray, now: float) -> GSResult:
 	if texts.is_empty() or texts.size() != colours.size():
-		return DotResult.fail(DotError.CODE_INVALID, "feed line needs fragments and one colour each (%d texts, %d colours)" % [texts.size(), colours.size()])
+		return GSResult.fail(GSError.CODE_INVALID, "feed line needs fragments and one colour each (%d texts, %d colours)" % [texts.size(), colours.size()])
 	if _cfg.feed_limit > 0:
 		while _lines.size() >= _cfg.feed_limit:
 			_pool.append(_lines.pop_front())
-	var line: DotHudFeedLine = _pool.pop_back() if not _pool.is_empty() else DotHudFeedLine.new()
+	var line: GSHudFeedLine = _pool.pop_back() if not _pool.is_empty() else GSHudFeedLine.new()
 	line.texts = texts
 	line.colours = colours
 	line.born = now
 	_lines.append(line)
-	return DotResult.success(line)
+	return GSResult.success(line)
 
 
 ## Drops lines older than `feed_ttl` (0 keeps them) and returns how many went.
@@ -53,7 +53,7 @@ func size() -> int:
 
 
 ## Line [param i], oldest first.
-func line(i: int) -> DotHudFeedLine:
+func line(i: int) -> GSHudFeedLine:
 	return _lines[i]
 
 

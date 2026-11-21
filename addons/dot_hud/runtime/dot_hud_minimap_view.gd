@@ -1,10 +1,10 @@
-class_name DotHudMinimapView
+class_name GSHudMinimapView
 extends Control
 
-## A minimap drawn with _draw and no textures. Feed it a config, the viewer, and a DotHudBlipSet; `layout()` is the draw list, so tests read it without a renderer.
+## A minimap drawn with _draw and no textures. Feed it a config, the viewer, and a GSHudBlipSet; `layout()` is the draw list, so tests read it without a renderer.
 
-var config := DotHudConfig.new()
-var blips := DotHudBlipSet.new()
+var config := GSHudConfig.new()
+var blips := GSHudBlipSet.new()
 var viewer_team := 0
 var viewer_pos := Vector3.ZERO
 var viewer_yaw := 0.0
@@ -15,7 +15,7 @@ var now := 0.0
 @export var ring_color := Color(1, 1, 1, 0.35)
 
 
-func setup(cfg: DotHudConfig, set: DotHudBlipSet) -> void:
+func setup(cfg: GSHudConfig, set: GSHudBlipSet) -> void:
 	config = cfg
 	blips = set
 	custom_minimum_size = Vector2.ONE * cfg.minimap_radius * 2.0
@@ -28,7 +28,7 @@ func layout() -> Array:
 	if not config.enabled:
 		return out
 	for b: Dictionary in blips.visible(viewer_team, now):
-		var p := DotHudRadar.project(viewer_pos, viewer_yaw, b["pos"], config.minimap_range, config.minimap_radius, config.minimap_rotate)
+		var p := GSHudRadar.project(viewer_pos, viewer_yaw, b["pos"], config.minimap_range, config.minimap_radius, config.minimap_rotate)
 		if not p["inside"] and not config.edge_pin:
 			continue
 		out.append({"pos": p["pos"], "alpha": b["alpha"], "own": int(b["team"]) == viewer_team, "pinned": not p["inside"]})

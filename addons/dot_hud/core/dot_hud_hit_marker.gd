@@ -1,4 +1,4 @@
-class_name DotHudHitMarker
+class_name GSHudHitMarker
 extends RefCounted
 
 ## When a hit marker shows and how strongly. Flash it only for a hit the server confirmed: a marker from local prediction says hit for shots the server then refuses.
@@ -12,7 +12,7 @@ var _life: float = 0.0
 
 
 ## Starts the marker at [param now].
-func flash(cfg: DotHudConfig, now: float, p_kill: bool = false, p_headshot: bool = false) -> void:
+func flash(cfg: GSHudConfig, now: float, p_kill: bool = false, p_headshot: bool = false) -> void:
 	if kill and not p_kill and now - _born < _life * 0.5:
 		return
 	kill = p_kill
