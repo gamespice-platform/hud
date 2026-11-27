@@ -3,7 +3,9 @@ extends RefCounted
 
 ## The minimap's data: who is seen where, how long ago, and who may see them. Pure logic; time is passed as `now`.
 
-var _blips: Dictionary = {}
+var _blips: Dictionary[StringName, Dictionary] = {}
+## Scratch list of [method prune], reused.
+var _gone: Array[StringName] = []
 var _limit: int
 var _ttl: float
 var _fade: float
@@ -25,8 +27,14 @@ func sight(id: StringName, team: int, pos: Vector3, now: float) -> GSResult:
 	if id == &"":
 		return GSResult.fail(GSError.CODE_INVALID, "blip id is empty")
 	if not _blips.has(id) and _limit > 0 and _blips.size() >= _limit:
-		return GSResult.fail(GSError.CODE_QUOTA, "blip limit %d reached" % _limit)
-	_blips[id] = {"team": team, "pos": pos, "seen": now}
+		return GSResult.fail(GSError.CODE_QUOTA, "blip limit %d reached" % _limit)  # perf-lint: allow string_build refusal path only
+	var b: Variant = _blips.get(id)
+	if b != null:
+		b["team"] = team
+		b["pos"] = pos
+		b["seen"] = now
+	else:
+		_blips[id] = {"team": team, "pos": pos, "seen": now}  # perf-lint: allow alloc first sighting of a blip only
 	return GSResult.success(id)
 
 
@@ -38,7 +46,8 @@ func remove(id: StringName) -> void:
 func prune(now: float) -> int:
 	if _ttl <= 0.0:
 		return 0
-	var gone: Array = []
+	var gone := _gone
+	gone.clear()
 	for id: StringName in _blips:
 		if now - float(_blips[id]["seen"]) > _ttl:
 			gone.append(id)

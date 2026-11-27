@@ -59,4 +59,4 @@ func _draw() -> void:
 		var pos := cam.unproject_position(n.at) + Vector2(n.drift, -rise_px * p)
 		var col := headshot_colour if n.headshot else colour
 		col.a = 1.0 - p
-		draw_string(font, pos, str(int(roundf(n.amount))), HORIZONTAL_ALIGNMENT_CENTER, -1, headshot_size if n.headshot else font_size, col)
+		draw_string(font, pos, n.label(), HORIZONTAL_ALIGNMENT_CENTER, -1, headshot_size if n.headshot else font_size, col)

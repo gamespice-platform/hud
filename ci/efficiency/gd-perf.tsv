@@ -1,0 +1,7 @@
+# gd-perf
+# Baselines only shrink: scripts/<gate> --update lowers or drops entries and refuses to add.
+addons/gs_hud/core/gs_hud_blip_set.gd::visible::alloc	2
+addons/gs_hud/core/gs_hud_blip_set.gd::visible::untyped_array	3
+addons/gs_hud/core/gs_hud_radar.gd::project::alloc	1
+addons/gs_hud/core/gs_hud_radar.gd::project::untyped_array	1
+addons/gs_hud/runtime/gs_hud_minimap_view.gd::layout::untyped_array	2
