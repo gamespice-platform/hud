@@ -2,6 +2,8 @@
 
 Godot 4.7+ addon for the shooter HUD with no art: kill feed, scoreboard, damage numbers, hit markers, crosshair, ammo and health widgets and a minimap, all bound to data, each as a pure model plus a thin drawing view. Part of the GameSpice addon family.
 
+gs-hud is a [GameSpice](https://gamespice.net) addon, MIT licensed and built with Claude Code. Run its headless suite with `examples/hud_selftest.tscn`. The games in [Zee's Games](https://zeesgames.com) are built on the GameSpice addons and run on live servers, but none of them draws its HUD with this addon yet.
+
 ## Install
 
 1. Copy `addons/gs_hud/` and `addons/gs_core/` into your project.
@@ -79,9 +81,11 @@ godot --headless --path . res://examples/hud_selftest.tscn
 
 The self-test is offline and exits non-zero on any failure.
 
-## Status
+## Used by
 
-Built and maintained with Claude Code. The test suites pass, but little of this has been in front of real players yet. Please report rough edges by opening an issue. The assets keep improving through Nightly.
+No shipped game uses it yet; the example scene shows it.
+
+The whole collection is at [zeesgames.com](https://zeesgames.com).
 
 ## Licence
 
